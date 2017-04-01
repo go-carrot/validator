@@ -68,6 +68,8 @@ Input is the actual value that you would like to run validations against.  Becau
 
 This is a slice of rules that you require a particular value to pass.
 
+This is optional, and can be not set if you don't have any rules for your value to pass.  The value will still go through the type check if the Input is a non-empty string.
+
 ## Rules
 
 A Rule is a very simple type of function:
