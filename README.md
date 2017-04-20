@@ -16,8 +16,8 @@ var name string
 
 // Run the validation
 err := Validate([]*Value{
-    &Value{Result: &id, Name: "id", Input: "100", Rules: []Rule{IsSet, MaxVal(10)}},
-    &Value{Result: &name, Name: "name", Input: "Brandon", Rules: []Rule{IsSet, MaxLength(20)}},
+    {Result: &id, Name: "id", Input: "100", Rules: []Rule{IsSet, MaxVal(10)}},
+    {Result: &name, Name: "name", Input: "Brandon", Rules: []Rule{IsSet, MaxLength(20)}},
 })
 
 // Check for any validation errors
@@ -125,8 +125,8 @@ The easiest way to call this validate function is to simply inline the `[]*Value
 
 ```go
 err := Validate([]*Value{
-    &Value{Result: &id, Name: "id", Input: "100", Rules: []Rule{IsSet, MaxVal(10)}},
-    &Value{Result: &name, Name: "name", Input: "Brandon", Rules: []Rule{IsSet, MaxLength(20)}},
+    {Result: &id, Name: "id", Input: "100", Rules: []Rule{IsSet, MaxVal(10)}},
+    {Result: &name, Name: "name", Input: "Brandon", Rules: []Rule{IsSet, MaxLength(20)}},
 })
 ```
 
