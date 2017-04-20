@@ -41,7 +41,7 @@ func TestUnknownType(t *testing.T) {
 	type Cat struct{ name string }
 	var myCat Cat
 	v.Validate([]*v.Value{
-		&v.Value{Result: &myCat, Name: "cat", Input: "{ 'name': 'rae' }"},
+		{Result: &myCat, Name: "cat", Input: "{ 'name': 'rae' }"},
 	})
 
 	// The Validate function should panic, and we never hit this line
@@ -53,7 +53,7 @@ func TestString(t *testing.T) {
 	// Test success case
 	var successId string
 	err := v.Validate([]*v.Value{
-		&v.Value{Result: &successId, Name: "id", Input: "20"},
+		{Result: &successId, Name: "id", Input: "20"},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, "20", successId)
@@ -61,7 +61,7 @@ func TestString(t *testing.T) {
 	// Test empty case
 	var emptyId string
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyId, Name: "id", Input: ""},
+		{Result: &emptyId, Name: "id", Input: ""},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, "", emptyId)
@@ -69,7 +69,7 @@ func TestString(t *testing.T) {
 	// Test empty case with IsSet rule
 	var emptyIsSetId string
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
+		{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, "", emptyIsSetId)
@@ -80,7 +80,7 @@ func TestFloat32(t *testing.T) {
 	// Test success case
 	var successId float32
 	err := v.Validate([]*v.Value{
-		&v.Value{Result: &successId, Name: "id", Input: "20.2"},
+		{Result: &successId, Name: "id", Input: "20.2"},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, float32(20.2), successId)
@@ -88,7 +88,7 @@ func TestFloat32(t *testing.T) {
 	// Test another success case
 	var anotherSuccessId float32
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &anotherSuccessId, Name: "id", Input: "20"},
+		{Result: &anotherSuccessId, Name: "id", Input: "20"},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, float32(20.0), anotherSuccessId)
@@ -96,7 +96,7 @@ func TestFloat32(t *testing.T) {
 	// Test empty case
 	var emptyId float32
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyId, Name: "id", Input: ""},
+		{Result: &emptyId, Name: "id", Input: ""},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, float32(0), emptyId)
@@ -104,7 +104,7 @@ func TestFloat32(t *testing.T) {
 	// Test empty case with IsSet rule
 	var emptyIsSetId float32
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
+		{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, float32(0), emptyIsSetId)
@@ -112,7 +112,7 @@ func TestFloat32(t *testing.T) {
 	// Test parse failure case
 	var parseFailureId float32
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &parseFailureId, Name: "id", Input: "20a", Rules: []v.Rule{IsSet}},
+		{Result: &parseFailureId, Name: "id", Input: "20a", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, float32(0), parseFailureId)
@@ -123,7 +123,7 @@ func TestFloat64(t *testing.T) {
 	// Test success case
 	var successId float64
 	err := v.Validate([]*v.Value{
-		&v.Value{Result: &successId, Name: "id", Input: "20.2"},
+		{Result: &successId, Name: "id", Input: "20.2"},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, float64(20.2), successId)
@@ -131,7 +131,7 @@ func TestFloat64(t *testing.T) {
 	// Test another success case
 	var anotherSuccessId float64
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &anotherSuccessId, Name: "id", Input: "20"},
+		{Result: &anotherSuccessId, Name: "id", Input: "20"},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, float64(20.0), anotherSuccessId)
@@ -139,7 +139,7 @@ func TestFloat64(t *testing.T) {
 	// Test empty case
 	var emptyId float64
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyId, Name: "id", Input: ""},
+		{Result: &emptyId, Name: "id", Input: ""},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, float64(0), emptyId)
@@ -147,7 +147,7 @@ func TestFloat64(t *testing.T) {
 	// Test empty case with IsSet rule
 	var emptyIsSetId float64
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
+		{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, float64(0), emptyIsSetId)
@@ -155,7 +155,7 @@ func TestFloat64(t *testing.T) {
 	// Test parse failure case
 	var parseFailureId float64
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &parseFailureId, Name: "id", Input: "20a", Rules: []v.Rule{IsSet}},
+		{Result: &parseFailureId, Name: "id", Input: "20a", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, float64(0), parseFailureId)
@@ -166,7 +166,7 @@ func TestBool(t *testing.T) {
 	// Test success case
 	var successBool bool
 	err := v.Validate([]*v.Value{
-		&v.Value{Result: &successBool, Name: "bool", Input: "true"},
+		{Result: &successBool, Name: "bool", Input: "true"},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, true, successBool)
@@ -174,7 +174,7 @@ func TestBool(t *testing.T) {
 	// Test empty case
 	var emptyBool bool
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyBool, Name: "bool", Input: ""},
+		{Result: &emptyBool, Name: "bool", Input: ""},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, false, emptyBool)
@@ -182,7 +182,7 @@ func TestBool(t *testing.T) {
 	// Test empty case with IsSet rule
 	var emptyIsSetBool bool
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyIsSetBool, Name: "bool", Input: "", Rules: []v.Rule{IsSet}},
+		{Result: &emptyIsSetBool, Name: "bool", Input: "", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, false, emptyIsSetBool)
@@ -190,7 +190,7 @@ func TestBool(t *testing.T) {
 	// Test failure case
 	var failureBool bool
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &failureBool, Name: "bool", Input: "not-a-bool"},
+		{Result: &failureBool, Name: "bool", Input: "not-a-bool"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, false, failureBool)
@@ -201,7 +201,7 @@ func TestInt(t *testing.T) {
 	// Test success case
 	var successId int
 	err := v.Validate([]*v.Value{
-		&v.Value{Result: &successId, Name: "id", Input: "20"},
+		{Result: &successId, Name: "id", Input: "20"},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, int(20), successId)
@@ -209,7 +209,7 @@ func TestInt(t *testing.T) {
 	// Test empty case
 	var emptyId int
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyId, Name: "id", Input: ""},
+		{Result: &emptyId, Name: "id", Input: ""},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, int(0), emptyId)
@@ -217,7 +217,7 @@ func TestInt(t *testing.T) {
 	// Test empty case with IsSet rule
 	var emptyIsSetId int
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
+		{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int(0), emptyIsSetId)
@@ -225,7 +225,7 @@ func TestInt(t *testing.T) {
 	// Test overflow case
 	var overflowId int
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &overflowId, Name: "id", Input: "9223372036854775808"},
+		{Result: &overflowId, Name: "id", Input: "9223372036854775808"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int(0), overflowId)
@@ -233,7 +233,7 @@ func TestInt(t *testing.T) {
 	// Test string case
 	var stringId int
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &stringId, Name: "id", Input: "Hello World"},
+		{Result: &stringId, Name: "id", Input: "Hello World"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int(0), stringId)
@@ -244,7 +244,7 @@ func TestInt8(t *testing.T) {
 	// Test success case
 	var successId int8
 	err := v.Validate([]*v.Value{
-		&v.Value{Result: &successId, Name: "id", Input: "20"},
+		{Result: &successId, Name: "id", Input: "20"},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, int8(20), successId)
@@ -252,7 +252,7 @@ func TestInt8(t *testing.T) {
 	// Test empty case
 	var emptyId int8
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyId, Name: "id", Input: ""},
+		{Result: &emptyId, Name: "id", Input: ""},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, int8(0), emptyId)
@@ -260,7 +260,7 @@ func TestInt8(t *testing.T) {
 	// Test empty case with IsSet rule
 	var emptyIsSetId int8
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
+		{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int8(0), emptyIsSetId)
@@ -268,7 +268,7 @@ func TestInt8(t *testing.T) {
 	// Test overflow case
 	var overflowId int8
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &overflowId, Name: "id", Input: "128"},
+		{Result: &overflowId, Name: "id", Input: "128"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int8(0), overflowId)
@@ -276,7 +276,7 @@ func TestInt8(t *testing.T) {
 	// Test string case
 	var stringId int8
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &stringId, Name: "id", Input: "Hello World"},
+		{Result: &stringId, Name: "id", Input: "Hello World"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int8(0), stringId)
@@ -287,7 +287,7 @@ func TestInt16(t *testing.T) {
 	// Test success case
 	var successId int16
 	err := v.Validate([]*v.Value{
-		&v.Value{Result: &successId, Name: "id", Input: "20"},
+		{Result: &successId, Name: "id", Input: "20"},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, int16(20), successId)
@@ -295,7 +295,7 @@ func TestInt16(t *testing.T) {
 	// Test empty case
 	var emptyId int16
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyId, Name: "id", Input: ""},
+		{Result: &emptyId, Name: "id", Input: ""},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, int16(0), emptyId)
@@ -303,7 +303,7 @@ func TestInt16(t *testing.T) {
 	// Test empty case with IsSet rule
 	var emptyIsSetId int16
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
+		{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int16(0), emptyIsSetId)
@@ -311,7 +311,7 @@ func TestInt16(t *testing.T) {
 	// Test overflow case
 	var overflowId int16
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &overflowId, Name: "id", Input: "32768"},
+		{Result: &overflowId, Name: "id", Input: "32768"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int16(0), overflowId)
@@ -319,7 +319,7 @@ func TestInt16(t *testing.T) {
 	// Test string case
 	var stringId int16
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &stringId, Name: "id", Input: "Hello World"},
+		{Result: &stringId, Name: "id", Input: "Hello World"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int16(0), stringId)
@@ -330,7 +330,7 @@ func TestInt32(t *testing.T) {
 	// Test success case
 	var successId int32
 	err := v.Validate([]*v.Value{
-		&v.Value{Result: &successId, Name: "id", Input: "20"},
+		{Result: &successId, Name: "id", Input: "20"},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, int32(20), successId)
@@ -338,7 +338,7 @@ func TestInt32(t *testing.T) {
 	// Test empty case
 	var emptyId int32
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyId, Name: "id", Input: ""},
+		{Result: &emptyId, Name: "id", Input: ""},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, int32(0), emptyId)
@@ -346,7 +346,7 @@ func TestInt32(t *testing.T) {
 	// Test empty case with IsSet rule
 	var emptyIsSetId int32
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
+		{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int32(0), emptyIsSetId)
@@ -354,7 +354,7 @@ func TestInt32(t *testing.T) {
 	// Test successful case with MaxVal rule
 	var maxValPassId int32
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &maxValPassId, Name: "id", Input: "100", Rules: []v.Rule{MaxVal(100)}},
+		{Result: &maxValPassId, Name: "id", Input: "100", Rules: []v.Rule{MaxVal(100)}},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, int32(100), maxValPassId)
@@ -362,7 +362,7 @@ func TestInt32(t *testing.T) {
 	// Test failure case with MaxVal rule
 	var maxValFailureId int32
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &maxValFailureId, Name: "id", Input: "101", Rules: []v.Rule{MaxVal(100)}},
+		{Result: &maxValFailureId, Name: "id", Input: "101", Rules: []v.Rule{MaxVal(100)}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int32(0), maxValFailureId)
@@ -370,7 +370,7 @@ func TestInt32(t *testing.T) {
 	// Test string case
 	var stringId int32
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &stringId, Name: "id", Input: "hello world"},
+		{Result: &stringId, Name: "id", Input: "hello world"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int32(0), stringId)
@@ -378,7 +378,7 @@ func TestInt32(t *testing.T) {
 	// Test float case
 	var floatId int32
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &floatId, Name: "id", Input: "20.1"},
+		{Result: &floatId, Name: "id", Input: "20.1"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int32(0), floatId)
@@ -386,7 +386,7 @@ func TestInt32(t *testing.T) {
 	// Test overflow case
 	var overflowId int32
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &overflowId, Name: "id", Input: "2147483648"},
+		{Result: &overflowId, Name: "id", Input: "2147483648"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int32(0), overflowId)
@@ -397,7 +397,7 @@ func TestInt64(t *testing.T) {
 	// Test success case
 	var successId int64
 	err := v.Validate([]*v.Value{
-		&v.Value{Result: &successId, Name: "id", Input: "20"},
+		{Result: &successId, Name: "id", Input: "20"},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, int64(20), successId)
@@ -405,7 +405,7 @@ func TestInt64(t *testing.T) {
 	// Test empty case
 	var emptyId int64
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyId, Name: "id", Input: ""},
+		{Result: &emptyId, Name: "id", Input: ""},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, int64(0), emptyId)
@@ -413,7 +413,7 @@ func TestInt64(t *testing.T) {
 	// Test empty case with IsSet rule
 	var emptyIsSetId int64
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
+		{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int64(0), emptyIsSetId)
@@ -421,7 +421,7 @@ func TestInt64(t *testing.T) {
 	// Test overflow case
 	var overflowId int64
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &overflowId, Name: "id", Input: "9223372036854775808"},
+		{Result: &overflowId, Name: "id", Input: "9223372036854775808"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int64(0), overflowId)
@@ -429,7 +429,7 @@ func TestInt64(t *testing.T) {
 	// Test string case
 	var stringId int64
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &stringId, Name: "id", Input: "Hello World"},
+		{Result: &stringId, Name: "id", Input: "Hello World"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, int64(0), stringId)
@@ -440,7 +440,7 @@ func TestUint(t *testing.T) {
 	// Test success case
 	var successId uint
 	err := v.Validate([]*v.Value{
-		&v.Value{Result: &successId, Name: "id", Input: "20"},
+		{Result: &successId, Name: "id", Input: "20"},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, uint(20), successId)
@@ -448,7 +448,7 @@ func TestUint(t *testing.T) {
 	// Test empty case
 	var emptyId uint
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyId, Name: "id", Input: ""},
+		{Result: &emptyId, Name: "id", Input: ""},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, uint(0), emptyId)
@@ -456,7 +456,7 @@ func TestUint(t *testing.T) {
 	// Test empty case with IsSet rule
 	var emptyIsSetId uint
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
+		{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint(0), emptyIsSetId)
@@ -464,7 +464,7 @@ func TestUint(t *testing.T) {
 	// Test overflow case
 	var overflowId uint
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &overflowId, Name: "id", Input: "18446744073709551616"},
+		{Result: &overflowId, Name: "id", Input: "18446744073709551616"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint(0), overflowId)
@@ -472,7 +472,7 @@ func TestUint(t *testing.T) {
 	// Test string case
 	var stringId uint
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &stringId, Name: "id", Input: "Hello World"},
+		{Result: &stringId, Name: "id", Input: "Hello World"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint(0), stringId)
@@ -483,7 +483,7 @@ func TestUint8(t *testing.T) {
 	// Test success case
 	var successId uint8
 	err := v.Validate([]*v.Value{
-		&v.Value{Result: &successId, Name: "id", Input: "20"},
+		{Result: &successId, Name: "id", Input: "20"},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, uint8(20), successId)
@@ -491,7 +491,7 @@ func TestUint8(t *testing.T) {
 	// Test empty case
 	var emptyId uint8
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyId, Name: "id", Input: ""},
+		{Result: &emptyId, Name: "id", Input: ""},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, uint8(0), emptyId)
@@ -499,7 +499,7 @@ func TestUint8(t *testing.T) {
 	// Test empty case with IsSet rule
 	var emptyIsSetId uint8
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
+		{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint8(0), emptyIsSetId)
@@ -507,7 +507,7 @@ func TestUint8(t *testing.T) {
 	// Test overflow case
 	var overflowId uint8
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &overflowId, Name: "id", Input: "256"},
+		{Result: &overflowId, Name: "id", Input: "256"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint8(0), overflowId)
@@ -515,7 +515,7 @@ func TestUint8(t *testing.T) {
 	// Test string case
 	var stringId uint8
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &stringId, Name: "id", Input: "Hello World"},
+		{Result: &stringId, Name: "id", Input: "Hello World"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint8(0), stringId)
@@ -526,7 +526,7 @@ func TestUint16(t *testing.T) {
 	// Test success case
 	var successId uint16
 	err := v.Validate([]*v.Value{
-		&v.Value{Result: &successId, Name: "id", Input: "20"},
+		{Result: &successId, Name: "id", Input: "20"},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, uint16(20), successId)
@@ -534,7 +534,7 @@ func TestUint16(t *testing.T) {
 	// Test empty case
 	var emptyId uint16
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyId, Name: "id", Input: ""},
+		{Result: &emptyId, Name: "id", Input: ""},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, uint16(0), emptyId)
@@ -542,7 +542,7 @@ func TestUint16(t *testing.T) {
 	// Test empty case with IsSet rule
 	var emptyIsSetId uint16
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
+		{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint16(0), emptyIsSetId)
@@ -550,7 +550,7 @@ func TestUint16(t *testing.T) {
 	// Test overflow case
 	var overflowId uint16
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &overflowId, Name: "id", Input: "65536"},
+		{Result: &overflowId, Name: "id", Input: "65536"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint16(0), overflowId)
@@ -558,7 +558,7 @@ func TestUint16(t *testing.T) {
 	// Test string case
 	var stringId uint16
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &stringId, Name: "id", Input: "Hello World"},
+		{Result: &stringId, Name: "id", Input: "Hello World"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint16(0), stringId)
@@ -569,7 +569,7 @@ func TestUint32(t *testing.T) {
 	// Test success case
 	var successId uint32
 	err := v.Validate([]*v.Value{
-		&v.Value{Result: &successId, Name: "id", Input: "20"},
+		{Result: &successId, Name: "id", Input: "20"},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, uint32(20), successId)
@@ -577,7 +577,7 @@ func TestUint32(t *testing.T) {
 	// Test empty case
 	var emptyId uint32
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyId, Name: "id", Input: ""},
+		{Result: &emptyId, Name: "id", Input: ""},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, uint32(0), emptyId)
@@ -585,7 +585,7 @@ func TestUint32(t *testing.T) {
 	// Test empty case with IsSet rule
 	var emptyIsSetId uint32
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
+		{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint32(0), emptyIsSetId)
@@ -593,7 +593,7 @@ func TestUint32(t *testing.T) {
 	// Test overflow case
 	var overflowId uint32
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &overflowId, Name: "id", Input: "4294967296"},
+		{Result: &overflowId, Name: "id", Input: "4294967296"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint32(0), overflowId)
@@ -601,7 +601,7 @@ func TestUint32(t *testing.T) {
 	// Test string case
 	var stringId uint32
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &stringId, Name: "id", Input: "Hello World"},
+		{Result: &stringId, Name: "id", Input: "Hello World"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint32(0), stringId)
@@ -612,7 +612,7 @@ func TestUint64(t *testing.T) {
 	// Test success case
 	var successId uint64
 	err := v.Validate([]*v.Value{
-		&v.Value{Result: &successId, Name: "id", Input: "20"},
+		{Result: &successId, Name: "id", Input: "20"},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, uint64(20), successId)
@@ -620,7 +620,7 @@ func TestUint64(t *testing.T) {
 	// Test empty case
 	var emptyId uint64
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyId, Name: "id", Input: ""},
+		{Result: &emptyId, Name: "id", Input: ""},
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, uint64(0), emptyId)
@@ -628,7 +628,7 @@ func TestUint64(t *testing.T) {
 	// Test empty case with IsSet rule
 	var emptyIsSetId uint64
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
+		{Result: &emptyIsSetId, Name: "id", Input: "", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint64(0), emptyIsSetId)
@@ -636,7 +636,7 @@ func TestUint64(t *testing.T) {
 	// Test overflow case
 	var overflowId uint64
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &overflowId, Name: "id", Input: "18446744073709551616"},
+		{Result: &overflowId, Name: "id", Input: "18446744073709551616"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint64(0), overflowId)
@@ -644,7 +644,7 @@ func TestUint64(t *testing.T) {
 	// Test string case
 	var stringId uint64
 	err = v.Validate([]*v.Value{
-		&v.Value{Result: &stringId, Name: "id", Input: "Hello World"},
+		{Result: &stringId, Name: "id", Input: "Hello World"},
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint64(0), stringId)
