@@ -1,6 +1,7 @@
 package validator_test
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	v "github.com/go-carrot/validator"
@@ -648,4 +649,34 @@ func TestUint64(t *testing.T) {
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint64(0), stringId)
+}
+
+// TestCustomTypeHandler tests that we can create a new type handler
+// and use it as expected
+func TestCustomTypeHandler(t *testing.T) {
+	// Create type handler
+	var nullStringTypeHandler = func(input string, value *v.Value) error {
+		nullString := value.Result.(*sql.NullString)
+		(*nullString).String = input
+		(*nullString).Valid = (input != "")
+		return nil
+	}
+
+	// Test valid case
+	var slug sql.NullString
+	err := v.Validate([]*v.Value{
+		{Result: &slug, Name: "slug", Input: "wow", TypeHandler: nullStringTypeHandler},
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, "wow", slug.String)
+	assert.Equal(t, true, slug.Valid)
+
+	// Test invalid case
+	var emptySlug sql.NullString
+	err = v.Validate([]*v.Value{
+		{Result: &emptySlug, Name: "slug", Input: "", TypeHandler: nullStringTypeHandler},
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, "", emptySlug.String)
+	assert.Equal(t, false, emptySlug.Valid)
 }
