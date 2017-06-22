@@ -41,10 +41,12 @@ Let's check out the Value struct.
 
 ```go
 type Value struct {
-    Result interface{}
-    Name   string
-    Input  string
-    Rules  []Rule
+    Result      interface{}
+    Default     string
+    Name        string
+    Input       string
+    Rules       []Rule
+    TypeHandler TypeHandler
 }
 ```
 
@@ -52,9 +54,15 @@ type Value struct {
 
 Result must be a pointer to the variable you want to store the parsed input in.
 
-Valid types for this are `*string`, `*float32`, `*float64`, `*bool`, `*int`, `*int8`, `*int16`, `*int32`, `*int64`, `*uint`, `*uint8`, `*uint16`, `*uint32`, `*uint64`.
+By default, supported types for this are `*string`, `*float32`, `*float64`, `*bool`, `*int`, `*int8`, `*int16`, `*int32`, `*int64`, `*uint`, `*uint8`, `*uint16`, `*uint32`, `*uint64`.
 
-It is expected that the value of the `Input` parameter can be parsed into the decided type using their respective [strconv](https://golang.org/pkg/strconv/) function, else an error will be thrown by  [the Validate function](#the-validate-function) when it is called.
+For the default supported types, it is expected that the value of the `Input` parameter can be parsed into the decided type using their respective [strconv](https://golang.org/pkg/strconv/) function, else an error will be thrown by  [the Validate function](#the-validate-function) when it is called.
+
+If you need to use another type, `TypeHandler` must also be set to the Value struct.
+
+#### Default
+
+This is the optional default value of `Input` that will be set, if the value of `Input` ends up being an empty string.
 
 #### Name
 
@@ -69,6 +77,12 @@ Input is the actual value that you would like to run validations against.  Becau
 This is a slice of rules that you require a particular value to pass.
 
 This is optional, and can be not set if you don't have any rules for your value to pass.  The value will still go through the type check if the Input is a non-empty string.
+
+#### TypeHandler
+
+TypeHandler is a function that defines how the input string is parsed.
+
+For basic types, it's not necessary to implement your own TypeHandler, as they have already been implemented and will be attached to Values automatically.
 
 ## Rules
 
@@ -112,6 +126,39 @@ Both of these strategies should feel very fluent in use:
 ```
 
 > You won't find any prebuilt rules in [go-carrot/validator](https://github.com/go-carrot/validator).  If you're looking for those check out the [go-carrot/rules](https://github.com/go-carrot/rules) repository.
+
+## TypeHandlers
+
+A TypeHandler is a function that follows the following definition:
+
+```go
+type TypeHandler func(input string, value *Value) error
+```
+
+A TypeHandler is responsible for:
+
+- Validation of the non-null string input
+  - (TypeHandlers aren't called if the string is not set - you can mandate that a value is required via `Rules`)
+- Converting string input to the desired type
+- Passing the converted type into the `value.Result`
+
+TypeHandlers are best explained by example.  This is a TypeHandler for a `*sql.NullInt64`
+
+```go
+func NullInt64TypeHandler = func(input string, value *v.Value) error {
+    // Get int64
+    res, err := strconv.ParseInt(input, 10, 64)
+    if err != nil {
+        return errors.New("Invalid parameter, must be an int64")
+    }
+
+    // Update nullInt
+    nullInt := value.Result.(*sql.NullInt64)
+    (*nullInt).Int64 = int64(res)
+    (*nullInt).Valid = true
+    return nil
+}
+```
 
 ## The Validate Function
 

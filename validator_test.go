@@ -1,6 +1,7 @@
 package validator_test
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	v "github.com/go-carrot/validator"
@@ -648,4 +649,50 @@ func TestUint64(t *testing.T) {
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint64(0), stringId)
+}
+
+// TestCustomTypeHandler tests that we can create a new type handler
+// and use it as expected
+func TestCustomTypeHandler(t *testing.T) {
+	// Create type handler
+	var nullInt64TypeHandler = func(input string, value *v.Value) error {
+		// Get int64
+		res, err := strconv.ParseInt(input, 10, 64)
+		if err != nil {
+			return errors.New("Invalid parameter, must be an int64")
+		}
+
+		// Update nullInt
+		nullInt := value.Result.(*sql.NullInt64)
+		(*nullInt).Int64 = int64(res)
+		(*nullInt).Valid = true
+		return nil
+	}
+
+	// Test valid case
+	var id sql.NullInt64
+	err := v.Validate([]*v.Value{
+		{Result: &id, Name: "id", Input: "42", TypeHandler: nullInt64TypeHandler},
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, int64(42), id.Int64)
+	assert.Equal(t, true, id.Valid)
+
+	// Test empty case
+	var emptyId sql.NullInt64
+	err = v.Validate([]*v.Value{
+		{Result: &emptyId, Name: "id", Input: "", TypeHandler: nullInt64TypeHandler},
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, int64(0), emptyId.Int64)
+	assert.Equal(t, false, emptyId.Valid)
+
+	// Test error case
+	var errorId sql.NullInt64
+	err = v.Validate([]*v.Value{
+		{Result: &errorId, Name: "id", Input: "abcd", TypeHandler: nullInt64TypeHandler},
+	})
+	assert.NotNil(t, err)
+	assert.Equal(t, int64(0), errorId.Int64)
+	assert.Equal(t, false, errorId.Valid)
 }

@@ -4,17 +4,22 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
-	"strconv"
 )
 
 // Value is the definition of a parameter that you would like to perform validation against.
 type Value struct {
-	Result  interface{}
-	Default string
-	Name    string
-	Input   string
-	Rules   []Rule
+	Result      interface{}
+	Default     string
+	Name        string
+	Input       string
+	Rules       []Rule
+	TypeHandler TypeHandler
 }
+
+// TypeHandler is a function that is responsible for
+// are responsible for validating the input
+// matches the type, and also to stuff the result into the *value.Result
+type TypeHandler func(input string, value *Value) error
 
 // Rule is a function that defines logic you would expect a Value to pass.
 // The parameters passed in to this function are their respective
@@ -40,97 +45,57 @@ func Validate(values []*Value) error {
 			}
 		}
 
-		// Sticking the value of result into result
-		if resolvedInput != "" {
-			switch i := (value.Result).(type) {
-			default:
-				panic(fmt.Sprintf("go-carrot/validator cannot handle a Value with Result of type %v", reflect.TypeOf(i)))
-			case *string:
-				*i = resolvedInput
-			case *float32:
-				res, err := strconv.ParseFloat(resolvedInput, 32)
-				if err != nil {
-					return errors.New(invalidParam(value.Name, "a float32"))
-				}
-				*i = float32(res)
-			case *float64:
-				res, err := strconv.ParseFloat(resolvedInput, 64)
-				if err != nil {
-					return errors.New(invalidParam(value.Name, "a float64"))
-				}
-				*i = float64(res)
-			case *bool:
-				res, err := strconv.ParseBool(resolvedInput)
-				if err != nil {
-					return errors.New(invalidParam(value.Name, "a bool"))
-				}
-				*i = res
-			case *int:
-				res, err := strconv.ParseInt(resolvedInput, 10, 0)
-				if err != nil {
-					return errors.New(invalidParam(value.Name, "an int"))
-				}
-				*i = int(res)
-			case *int8:
-				res, err := strconv.ParseInt(resolvedInput, 10, 8)
-				if err != nil {
-					return errors.New(invalidParam(value.Name, "an int8"))
-				}
-				*i = int8(res)
-			case *int16:
-				res, err := strconv.ParseInt(resolvedInput, 10, 16)
-				if err != nil {
-					return errors.New(invalidParam(value.Name, "an int16"))
-				}
-				*i = int16(res)
-			case *int32:
-				res, err := strconv.ParseInt(resolvedInput, 10, 32)
-				if err != nil {
-					return errors.New(invalidParam(value.Name, "an int32"))
-				}
-				*i = int32(res)
-			case *int64:
-				res, err := strconv.ParseInt(resolvedInput, 10, 64)
-				if err != nil {
-					return errors.New(invalidParam(value.Name, "an int64"))
-				}
-				*i = int64(res)
-			case *uint:
-				res, err := strconv.ParseUint(resolvedInput, 10, 0)
-				if err != nil {
-					return errors.New(invalidParam(value.Name, "a uint"))
-				}
-				*i = uint(res)
-			case *uint8:
-				res, err := strconv.ParseUint(resolvedInput, 10, 8)
-				if err != nil {
-					return errors.New(invalidParam(value.Name, "a uint8"))
-				}
-				*i = uint8(res)
-			case *uint16:
-				res, err := strconv.ParseUint(resolvedInput, 10, 16)
-				if err != nil {
-					return errors.New(invalidParam(value.Name, "a uint16"))
-				}
-				*i = uint16(res)
-			case *uint32:
-				res, err := strconv.ParseUint(resolvedInput, 10, 32)
-				if err != nil {
-					return errors.New(invalidParam(value.Name, "a uint32"))
-				}
-				*i = uint32(res)
-			case *uint64:
-				res, err := strconv.ParseUint(resolvedInput, 10, 64)
-				if err != nil {
-					return errors.New(invalidParam(value.Name, "a uint64"))
-				}
-				*i = uint64(res)
+		// Set primitive type handlers
+		if value.TypeHandler == nil {
+			err := applyTypeHandler(value)
+			if err != nil {
+				panic(err.Error())
+			}
+		}
+
+		// Validate against type
+		if value.Input != "" {
+			err := value.TypeHandler(resolvedInput, value)
+			if err != nil {
+				return err
 			}
 		}
 	}
 	return nil
 }
 
-func invalidParam(name string, mustBe string) string {
-	return fmt.Sprintf("Invalid `%v` parameter, `%v` must be %v", name, name, mustBe)
+func applyTypeHandler(value *Value) error {
+	switch i := (value.Result).(type) {
+	default:
+		return errors.New(fmt.Sprintf("go-carrot/validator cannot by default handle a Value with Result of type %v.  Must set a custom TypeHandler for %v.", reflect.TypeOf(i), value.Name))
+	case *string:
+		value.TypeHandler = stringHandler
+	case *float32:
+		value.TypeHandler = float32Handler
+	case *float64:
+		value.TypeHandler = float64Handler
+	case *bool:
+		value.TypeHandler = boolHandler
+	case *int:
+		value.TypeHandler = intHandler
+	case *int8:
+		value.TypeHandler = int8Handler
+	case *int16:
+		value.TypeHandler = int16Handler
+	case *int32:
+		value.TypeHandler = int32Handler
+	case *int64:
+		value.TypeHandler = int64Handler
+	case *uint:
+		value.TypeHandler = uintHandler
+	case *uint8:
+		value.TypeHandler = uint8Handler
+	case *uint16:
+		value.TypeHandler = uint16Handler
+	case *uint32:
+		value.TypeHandler = uint32Handler
+	case *uint64:
+		value.TypeHandler = uint64Handler
+	}
+	return nil
 }
