@@ -655,28 +655,44 @@ func TestUint64(t *testing.T) {
 // and use it as expected
 func TestCustomTypeHandler(t *testing.T) {
 	// Create type handler
-	var nullStringTypeHandler = func(input string, value *v.Value) error {
-		nullString := value.Result.(*sql.NullString)
-		(*nullString).String = input
-		(*nullString).Valid = (input != "")
+	var nullInt64TypeHandler = func(input string, value *v.Value) error {
+		// Get int64
+		res, err := strconv.ParseInt(input, 10, 64)
+		if err != nil {
+			return errors.New("Invalid parameter, must be an int64")
+		}
+
+		// Update nullInt
+		nullInt := value.Result.(*sql.NullInt64)
+		(*nullInt).Int64 = int64(res)
+		(*nullInt).Valid = true
 		return nil
 	}
 
 	// Test valid case
-	var slug sql.NullString
+	var id sql.NullInt64
 	err := v.Validate([]*v.Value{
-		{Result: &slug, Name: "slug", Input: "wow", TypeHandler: nullStringTypeHandler},
+		{Result: &id, Name: "id", Input: "42", TypeHandler: nullInt64TypeHandler},
 	})
 	assert.Nil(t, err)
-	assert.Equal(t, "wow", slug.String)
-	assert.Equal(t, true, slug.Valid)
+	assert.Equal(t, int64(42), id.Int64)
+	assert.Equal(t, true, id.Valid)
 
-	// Test invalid case
-	var emptySlug sql.NullString
+	// Test empty case
+	var emptyId sql.NullInt64
 	err = v.Validate([]*v.Value{
-		{Result: &emptySlug, Name: "slug", Input: "", TypeHandler: nullStringTypeHandler},
+		{Result: &emptyId, Name: "id", Input: "", TypeHandler: nullInt64TypeHandler},
 	})
 	assert.Nil(t, err)
-	assert.Equal(t, "", emptySlug.String)
-	assert.Equal(t, false, emptySlug.Valid)
+	assert.Equal(t, int64(0), emptyId.Int64)
+	assert.Equal(t, false, emptyId.Valid)
+
+	// Test error case
+	var errorId sql.NullInt64
+	err = v.Validate([]*v.Value{
+		{Result: &errorId, Name: "id", Input: "abcd", TypeHandler: nullInt64TypeHandler},
+	})
+	assert.NotNil(t, err)
+	assert.Equal(t, int64(0), errorId.Int64)
+	assert.Equal(t, false, errorId.Valid)
 }
