@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
+	"time"
 )
 
 // IsSet is a rule that makes sure the value passed in isn't an empty string
@@ -649,6 +650,41 @@ func TestUint64(t *testing.T) {
 	})
 	assert.NotNil(t, err)
 	assert.Equal(t, uint64(0), stringId)
+}
+
+// TestTime tests handling of a time.Time as the result
+func TestTime(t *testing.T) {
+	// Test success case
+	var successTime time.Time
+	err := v.Validate([]*v.Value{
+		{Result: &successTime, Name: "time", Input: "2012-11-01T22:08:41+00:00"},
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, successTime.Year(), 2012)
+	assert.Equal(t, successTime.Month(), time.November)
+	assert.Equal(t, successTime.Day(), 1)
+
+	// Test empty case
+	var emptyTime time.Time
+	err = v.Validate([]*v.Value{
+		{Result: &emptyTime, Name: "time", Input: ""},
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, emptyTime.Year(), 1)
+
+	// Test empty with isSet rule
+	err = v.Validate([]*v.Value{
+		{Result: &emptyTime, Name: "time", Input: "", Rules: []v.Rule{IsSet}},
+	})
+	assert.NotNil(t, err)
+	assert.Equal(t, emptyTime.Year(), 1)
+
+	// Test error case
+	var errorTime time.Time
+	err = v.Validate([]*v.Value{
+		{Result: &errorTime, Name: "time", Input: "abcd"},
+	})
+	assert.NotNil(t, err)
 }
 
 // TestCustomTypeHandler tests that we can create a new type handler
