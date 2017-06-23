@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"time"
 )
 
 func stringHandler(input string, value *Value) error {
@@ -125,6 +126,15 @@ func uint64Handler(input string, value *Value) error {
 		return errors.New(invalidParam(value.Name, "a uint64"))
 	}
 	*value.Result.(*uint64) = uint64(res)
+	return nil
+}
+
+func timeHandler(input string, value *Value) error {
+	res, err := time.Parse(time.RFC3339, input)
+	if err != nil {
+		return errors.New(invalidParam(value.Name, "an RFC 3339 date-time (2006-01-02T15:04:05Z07:00)"))
+	}
+	*value.Result.(*time.Time) = res
 	return nil
 }
 
