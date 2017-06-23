@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"time"
 )
 
 // Value is the definition of a parameter that you would like to perform validation against.
@@ -96,6 +97,8 @@ func applyTypeHandler(value *Value) error {
 		value.TypeHandler = uint32Handler
 	case *uint64:
 		value.TypeHandler = uint64Handler
+	case *time.Time:
+		value.TypeHandler = timeHandler
 	}
 	return nil
 }
