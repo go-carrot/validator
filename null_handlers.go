@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// NullIntHandler is a TypeHandler for null.Int
 func NullIntHandler(input string, value *Value) error {
 	// Get int64
 	res, err := strconv.ParseInt(input, 10, 64)
@@ -21,6 +22,7 @@ func NullIntHandler(input string, value *Value) error {
 	return nil
 }
 
+// NullStringHandler is a TypeHandler for null.String
 func NullStringHandler(input string, value *Value) error {
 	nullString := value.Result.(*null.String)
 	(*nullString).String = input
@@ -28,6 +30,7 @@ func NullStringHandler(input string, value *Value) error {
 	return nil
 }
 
+// NullFloatHandler is a TypeHandler for null.Float
 func NullFloatHandler(input string, value *Value) error {
 	// Get float64
 	res, err := strconv.ParseFloat(input, 64)
@@ -42,6 +45,7 @@ func NullFloatHandler(input string, value *Value) error {
 	return nil
 }
 
+// NullBoolHandler is a TypeHandler for null.Bool
 func NullBoolHandler(input string, value *Value) error {
 	// Get bool
 	res, err := strconv.ParseBool(input)
@@ -56,6 +60,7 @@ func NullBoolHandler(input string, value *Value) error {
 	return nil
 }
 
+// NullTimeHandler is a TypeHandler for null.Time
 func NullTimeHandler(input string, value *Value) error {
 	// Get time.Time
 	res, err := time.Parse(time.RFC3339, input)
