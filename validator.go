@@ -1,7 +1,6 @@
 package validator
 
 import (
-	"errors"
 	"fmt"
 	"reflect"
 	"time"
@@ -68,7 +67,7 @@ func Validate(values []*Value) error {
 func applyTypeHandler(value *Value) error {
 	switch i := (value.Result).(type) {
 	default:
-		return errors.New(fmt.Sprintf("go-carrot/validator cannot by default handle a Value with Result of type %v.  Must set a custom TypeHandler for %v.", reflect.TypeOf(i), value.Name))
+		return fmt.Errorf("go-carrot/validator cannot by default handle a Value with Result of type %v.  Must set a custom TypeHandler for %v.", reflect.TypeOf(i), value.Name)
 	case *string:
 		value.TypeHandler = stringHandler
 	case *float32:
