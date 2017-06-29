@@ -54,7 +54,7 @@ func Validate(values []*Value) error {
 		}
 
 		// Validate against type
-		if value.Input != "" {
+		if resolvedInput != "" {
 			err := value.TypeHandler(resolvedInput, value)
 			if err != nil {
 				return err
