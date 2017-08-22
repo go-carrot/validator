@@ -1,10 +1,11 @@
 package validator_test
 
 import (
-	v "github.com/go-carrot/validator"
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	v "github.com/go-carrot/validator"
+	"github.com/stretchr/testify/assert"
 )
 
 // TestString tests handling of a string as the result
@@ -57,8 +58,7 @@ func TestFloat32(t *testing.T) {
 	err = v.Validate([]*v.Value{
 		{Result: &emptyId, Name: "id", Input: ""},
 	})
-	assert.Nil(t, err)
-	assert.Equal(t, float32(0), emptyId)
+	assert.NotNil(t, err)
 
 	// Test empty case with IsSet rule
 	var emptyIsSetId float32
@@ -100,8 +100,7 @@ func TestFloat64(t *testing.T) {
 	err = v.Validate([]*v.Value{
 		{Result: &emptyId, Name: "id", Input: ""},
 	})
-	assert.Nil(t, err)
-	assert.Equal(t, float64(0), emptyId)
+	assert.NotNil(t, err)
 
 	// Test empty case with IsSet rule
 	var emptyIsSetId float64
@@ -135,8 +134,7 @@ func TestBool(t *testing.T) {
 	err = v.Validate([]*v.Value{
 		{Result: &emptyBool, Name: "bool", Input: ""},
 	})
-	assert.Nil(t, err)
-	assert.Equal(t, false, emptyBool)
+	assert.NotNil(t, err)
 
 	// Test empty case with IsSet rule
 	var emptyIsSetBool bool
@@ -144,7 +142,6 @@ func TestBool(t *testing.T) {
 		{Result: &emptyIsSetBool, Name: "bool", Input: "", Rules: []v.Rule{IsSet}},
 	})
 	assert.NotNil(t, err)
-	assert.Equal(t, false, emptyIsSetBool)
 
 	// Test failure case
 	var failureBool bool
@@ -170,8 +167,7 @@ func TestInt(t *testing.T) {
 	err = v.Validate([]*v.Value{
 		{Result: &emptyId, Name: "id", Input: ""},
 	})
-	assert.Nil(t, err)
-	assert.Equal(t, int(0), emptyId)
+	assert.NotNil(t, err)
 
 	// Test empty case with IsSet rule
 	var emptyIsSetId int
@@ -213,8 +209,7 @@ func TestInt8(t *testing.T) {
 	err = v.Validate([]*v.Value{
 		{Result: &emptyId, Name: "id", Input: ""},
 	})
-	assert.Nil(t, err)
-	assert.Equal(t, int8(0), emptyId)
+	assert.NotNil(t, err)
 
 	// Test empty case with IsSet rule
 	var emptyIsSetId int8
@@ -256,8 +251,7 @@ func TestInt16(t *testing.T) {
 	err = v.Validate([]*v.Value{
 		{Result: &emptyId, Name: "id", Input: ""},
 	})
-	assert.Nil(t, err)
-	assert.Equal(t, int16(0), emptyId)
+	assert.NotNil(t, err)
 
 	// Test empty case with IsSet rule
 	var emptyIsSetId int16
@@ -299,8 +293,7 @@ func TestInt32(t *testing.T) {
 	err = v.Validate([]*v.Value{
 		{Result: &emptyId, Name: "id", Input: ""},
 	})
-	assert.Nil(t, err)
-	assert.Equal(t, int32(0), emptyId)
+	assert.NotNil(t, err)
 
 	// Test empty case with IsSet rule
 	var emptyIsSetId int32
@@ -366,8 +359,7 @@ func TestInt64(t *testing.T) {
 	err = v.Validate([]*v.Value{
 		{Result: &emptyId, Name: "id", Input: ""},
 	})
-	assert.Nil(t, err)
-	assert.Equal(t, int64(0), emptyId)
+	assert.NotNil(t, err)
 
 	// Test empty case with IsSet rule
 	var emptyIsSetId int64
@@ -409,8 +401,7 @@ func TestUint(t *testing.T) {
 	err = v.Validate([]*v.Value{
 		{Result: &emptyId, Name: "id", Input: ""},
 	})
-	assert.Nil(t, err)
-	assert.Equal(t, uint(0), emptyId)
+	assert.NotNil(t, err)
 
 	// Test empty case with IsSet rule
 	var emptyIsSetId uint
@@ -452,8 +443,7 @@ func TestUint8(t *testing.T) {
 	err = v.Validate([]*v.Value{
 		{Result: &emptyId, Name: "id", Input: ""},
 	})
-	assert.Nil(t, err)
-	assert.Equal(t, uint8(0), emptyId)
+	assert.NotNil(t, err)
 
 	// Test empty case with IsSet rule
 	var emptyIsSetId uint8
@@ -495,8 +485,7 @@ func TestUint16(t *testing.T) {
 	err = v.Validate([]*v.Value{
 		{Result: &emptyId, Name: "id", Input: ""},
 	})
-	assert.Nil(t, err)
-	assert.Equal(t, uint16(0), emptyId)
+	assert.NotNil(t, err)
 
 	// Test empty case with IsSet rule
 	var emptyIsSetId uint16
@@ -538,8 +527,7 @@ func TestUint32(t *testing.T) {
 	err = v.Validate([]*v.Value{
 		{Result: &emptyId, Name: "id", Input: ""},
 	})
-	assert.Nil(t, err)
-	assert.Equal(t, uint32(0), emptyId)
+	assert.NotNil(t, err)
 
 	// Test empty case with IsSet rule
 	var emptyIsSetId uint32
@@ -581,8 +569,7 @@ func TestUint64(t *testing.T) {
 	err = v.Validate([]*v.Value{
 		{Result: &emptyId, Name: "id", Input: ""},
 	})
-	assert.Nil(t, err)
-	assert.Equal(t, uint64(0), emptyId)
+	assert.NotNil(t, err)
 
 	// Test empty case with IsSet rule
 	var emptyIsSetId uint64
@@ -626,8 +613,7 @@ func TestTime(t *testing.T) {
 	err = v.Validate([]*v.Value{
 		{Result: &emptyTime, Name: "time", Input: ""},
 	})
-	assert.Nil(t, err)
-	assert.Equal(t, emptyTime.Year(), 1)
+	assert.NotNil(t, err)
 
 	// Test empty with isSet rule
 	err = v.Validate([]*v.Value{

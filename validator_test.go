@@ -4,10 +4,11 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	v "github.com/go-carrot/validator"
-	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
+
+	v "github.com/go-carrot/validator"
+	"github.com/stretchr/testify/assert"
 )
 
 // IsSet is a rule that makes sure the value passed in isn't an empty string
@@ -81,9 +82,7 @@ func TestCustomTypeHandler(t *testing.T) {
 	err = v.Validate([]*v.Value{
 		{Result: &emptyId, Name: "id", Input: "", TypeHandler: nullInt64TypeHandler},
 	})
-	assert.Nil(t, err)
-	assert.Equal(t, int64(0), emptyId.Int64)
-	assert.Equal(t, false, emptyId.Valid)
+	assert.NotNil(t, err)
 
 	// Test error case
 	var errorId sql.NullInt64
