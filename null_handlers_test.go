@@ -1,11 +1,12 @@
 package validator_test
 
 import (
+	"testing"
+	"time"
+
 	v "github.com/go-carrot/validator"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/guregu/null.v3"
-	"testing"
-	"time"
 )
 
 // TestNullInt tests handling of a null.Int as the result
@@ -93,7 +94,7 @@ func TestNullTime(t *testing.T) {
 	assert.Equal(t, successTime.Time.Day(), 1)
 
 	// Test failure case
-	var errorTime time.Time
+	var errorTime null.Time
 	err = v.Validate([]*v.Value{
 		{Result: &errorTime, Name: "time", Input: "abcd", TypeHandler: v.NullTimeHandler},
 	})
