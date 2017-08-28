@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"reflect"
 	"time"
+
+	"gopkg.in/guregu/null.v3"
 )
 
 // Value is the definition of a parameter that you would like to perform validation against.
@@ -45,7 +47,7 @@ func Validate(values []*Value) error {
 			}
 		}
 
-		// Set primitive type handlers
+		// Set primitive + null type handlers
 		if value.TypeHandler == nil {
 			err := applyTypeHandler(value)
 			if err != nil {
@@ -96,6 +98,16 @@ func applyTypeHandler(value *Value) error {
 		value.TypeHandler = uint64Handler
 	case *time.Time:
 		value.TypeHandler = timeHandler
+	case *null.Int:
+		value.TypeHandler = nullIntHandler
+	case *null.String:
+		value.TypeHandler = nullStringHandler
+	case *null.Float:
+		value.TypeHandler = nullFloatHandler
+	case *null.Bool:
+		value.TypeHandler = nullBoolHandler
+	case *null.Time:
+		value.TypeHandler = nullTimeHandler
 	}
 	return nil
 }

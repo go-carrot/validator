@@ -8,8 +8,7 @@ import (
 	"gopkg.in/guregu/null.v3"
 )
 
-// NullIntHandler is a TypeHandler for null.Int
-func NullIntHandler(input string, value *Value) error {
+func nullIntHandler(input string, value *Value) error {
 	// Cast
 	nullInt := value.Result.(*null.Int)
 
@@ -31,16 +30,14 @@ func NullIntHandler(input string, value *Value) error {
 	return nil
 }
 
-// NullStringHandler is a TypeHandler for null.String
-func NullStringHandler(input string, value *Value) error {
+func nullStringHandler(input string, value *Value) error {
 	nullString := value.Result.(*null.String)
 	(*nullString).String = input
 	(*nullString).Valid = len(input) != 0
 	return nil
 }
 
-// NullFloatHandler is a TypeHandler for null.Float
-func NullFloatHandler(input string, value *Value) error {
+func nullFloatHandler(input string, value *Value) error {
 	// Cast
 	nullFloat := value.Result.(*null.Float)
 
@@ -62,8 +59,7 @@ func NullFloatHandler(input string, value *Value) error {
 	return nil
 }
 
-// NullBoolHandler is a TypeHandler for null.Bool
-func NullBoolHandler(input string, value *Value) error {
+func nullBoolHandler(input string, value *Value) error {
 	// Cast
 	nullBool := value.Result.(*null.Bool)
 
@@ -85,8 +81,7 @@ func NullBoolHandler(input string, value *Value) error {
 	return nil
 }
 
-// NullTimeHandler is a TypeHandler for null.Time
-func NullTimeHandler(input string, value *Value) error {
+func nullTimeHandler(input string, value *Value) error {
 	// Cast
 	nullTime := value.Result.(*null.Time)
 
