@@ -16,14 +16,14 @@ var name string
 
 // Run the validation
 err := Validate([]*Value{
-    {Result: &id, Name: "id", Input: "100", Rules: []Rule{IsSet, MaxVal(10)}},
-    {Result: &name, Name: "name", Input: "Brandon", Rules: []Rule{IsSet, MaxLength(20)}},
+    {Result: &id, Name: "id", Input: "100", Rules: []Rule{MaxVal(10)}},
+    {Result: &name, Name: "name", Input: "Brandon", Rules: []Rule{MaxLength(20)}},
 })
 
 // Check for any validation errors
 //
-// This error is thrown if one of the rules fail, or if the Input is a
-// non-empty string and fails to be converted into it's Result type
+// This error is thrown if one of the rules fail, or if the Input
+// fails to be converted into it's Result type
 if err != nil {
     // TODO, handle error (possibly HTTP 403)
     fmt.Println(err)
@@ -33,7 +33,7 @@ if err != nil {
 // TODO, handle success - `id` and `name` are set at this point
 ```
 
-> Note, the Rule implementations (IsSet, MaxVal, etc.) aren't included in this library.  You'll either have to build them out yourself or check out [go-carrot/rules](https://github.com/go-carrot/rules) for some prebuilt ones.
+> Note, the Rule implementations (MaxVal, MaxLength, etc.) aren't included in this library.  You'll either have to build them out yourself or check out [go-carrot/rules](https://github.com/go-carrot/rules) for some prebuilt ones.
 
 ## Values
 
@@ -137,26 +137,34 @@ type TypeHandler func(input string, value *Value) error
 
 A TypeHandler is responsible for:
 
-- Validation of the non-null string input
-  - (TypeHandlers aren't called if the string is not set - you can mandate that a value is required via `Rules`)
+- Validation of the string input
 - Converting string input to the desired type
 - Passing the converted type into the `value.Result`
 
-TypeHandlers are best explained by example.  This is a TypeHandler for a `*sql.NullInt64`
+TypeHandlers are best explained by example.  This is a TypeHandler for a `*null.Int`
 
 ```go
-func NullInt64TypeHandler = func(input string, value *v.Value) error {
-    // Get int64
-    res, err := strconv.ParseInt(input, 10, 64)
-    if err != nil {
-        return errors.New("Invalid parameter, must be an int64")
-    }
+// NullIntHandler is a TypeHandler for null.Int
+func NullIntHandler(input string, value *Value) error {
+	// Cast
+	nullInt := value.Result.(*null.Int)
 
-    // Update nullInt
-    nullInt := value.Result.(*sql.NullInt64)
-    (*nullInt).Int64 = int64(res)
-    (*nullInt).Valid = true
-    return nil
+	// Check for empty
+	if len(input) == 0 {
+		(*nullInt).Valid = false
+		return nil
+	}
+
+	// Get int64
+	res, err := strconv.ParseInt(input, 10, 64)
+	if err != nil {
+		return errors.New(invalidParam(value.Name, "an int64"))
+	}
+
+	// Update null.Int
+	(*nullInt).Int64 = int64(res)
+	(*nullInt).Valid = true
+	return nil
 }
 ```
 
